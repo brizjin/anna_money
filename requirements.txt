@@ -1,0 +1,4 @@
+aiohttp
+pyhamcrest
+pytest
+pytest-aiohttp
