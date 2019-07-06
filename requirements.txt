@@ -1,4 +1,7 @@
 aiohttp
+aiohttp_jinja2
 pyhamcrest
 pytest
 pytest-aiohttp
+lxml
+html5lib

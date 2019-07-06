@@ -1,5 +1,5 @@
 from aiohttp import web
 
-from web.server import app
+from web.app import create_app
 
-web.run_app(app)
+web.run_app(create_app())
