@@ -10,18 +10,22 @@ def generate_string(n):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=n))
 
 
+msg = generate_string(10)
+
+
 @aiohttp_jinja2.template('index.jinja2')
 async def index_handler(request):
-    return dict(value=generate_string(10))
+    return dict(value=msg)
 
 
 async def send_msg(app):
+    global msg
     while True:
-        msg = generate_string(10)
-        for ws in app['websockets']:
-            # print(f'send msg')
-            await ws.send_str(msg)
         await asyncio.sleep(1)
+        if len(app['websockets']) > 0:
+            msg = generate_string(10)
+            for ws in app['websockets']:
+                await ws.send_str(msg)
 
 
 async def start_workers(app):
@@ -37,12 +41,9 @@ async def websocket_handler(request):
     try:
         async for msg in ws:  # type: WSMessage
             if msg.data == 'connect':
-                # await ws.send_str("connected")
-                # print('connected')
                 pass
     except Exception as e:
         print(e.__dict__)
     finally:
         request.app['websockets'].remove(ws)
-    # print('websocket_handler exit')
     return ws
